@@ -31,32 +31,17 @@
                 </div>
 
                 <div class="character-container">
-                    <div class="character" id="character">
-                        <!-- Анимация персонажа -->
-                        <div class="character-body">
-                            <div class="head">
-                                <div class="face">
-                                    <div class="eye left"></div>
-                                    <div class="eye right"></div>
-                                    <div class="mouth"></div>
-                                </div>
-                            </div>
-                            <div class="torso">
-                                <div class="arm left"></div>
-                                <div class="arm right"></div>
-                            </div>
-                            <div class="legs">
-                                <div class="leg left"></div>
-                                <div class="leg right">
-                                    <div class="foot" id="foot"></div>
-                                </div>
-                            </div>
-                            <div class="balls" id="balls">
-                                <!-- Шарики будут генерироваться через JS -->
-                            </div>
+                    <div class="gif-wrapper">
+                        <img src="https://www.yapfiles.com/files/1252796/gifkipinathuipesochnica1639083.gif" 
+                             alt="Человек пинает хуи" 
+                             class="procrastination-gif"
+                             id="procrastinationGif">
+                        <div class="gif-overlay">
+                            <div class="overlay-text">Текущий статус:</div>
+                            <div class="overlay-status" id="gifStatus">В процессе...</div>
                         </div>
                     </div>
-                    <div class="character-label">Текущее состояние бездельника</div>
+                    <div class="character-label">Реалистичная симуляция процесса</div>
                 </div>
             </div>
 
@@ -83,6 +68,21 @@
                 </div>
             </div>
 
+            <div class="progress-section">
+                <h3><i class="fas fa-spinner"></i> Прогресс мастерства</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-labels">
+                    <span>Новичок</span>
+                    <span>Лентяй</span>
+                    <span>Мастер прокрастинации</span>
+                    <span>Гуру безделья</span>
+                    <span>Легенда</span>
+                </div>
+                <div class="current-level" id="currentLevel">Уровень: Новичок</div>
+            </div>
+
             <div class="controls-section">
                 <div class="control-group">
                     <button id="startBtn" class="btn start-btn">
@@ -101,6 +101,13 @@
                 </div>
             </div>
 
+            <div class="achievements-section">
+                <h3><i class="fas fa-award"></i> Достижения</h3>
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Достижения будут добавляться через JS -->
+                </div>
+            </div>
+
             <div class="philosophy-section">
                 <h2><i class="fas fa-quote-left"></i> Философия процесса</h2>
                 <div class="quotes">
@@ -111,6 +118,10 @@
                     <div class="quote">
                         "Чем дольше ты это делаешь, тем лучше получается"
                         <div class="author">— Мастер Прокрастинации</div>
+                    </div>
+                    <div class="quote">
+                        "Зачем делать сегодня то, что можно отложить на завтра?"
+                        <div class="author">— Основной принцип</div>
                     </div>
                 </div>
             </div>
@@ -126,6 +137,7 @@
                 <div class="tech">
                     <span>Состояние: <span id="status">Ожидание...</span></span>
                     <span id="lastUpdate">Запуск...</span>
+                    <span>GIF: <span id="gifSource">YapFiles</span></span>
                 </div>
             </div>
         </footer>
