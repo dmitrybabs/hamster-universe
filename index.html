@@ -3,56 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Хомячковая Вселенная</title>
+    <title>Таймер Пинания Хуев</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🐹 Хомячковая Вселенная 🐹</h1>
-            <p class="subtitle">Хомячки размножаются каждую секунду!</p>
+            <h1><i class="fas fa-couch"></i> Таймер Пинания Хуев <i class="fas fa-couch"></i></h1>
+            <p class="subtitle">Честный счётчик твоего безделья</p>
         </header>
 
-        <div class="stats">
-            <div class="stat-card">
-                <h2>⏱️ Время существования</h2>
-                <div id="timer" class="timer">0 секунд</div>
-            </div>
-            
-            <div class="stat-card">
-                <h2>🐹 Количество хомячков</h2>
-                <div id="hamsterCount" class="counter">1 хомяк</div>
-            </div>
-            
-            <div class="stat-card">
-                <h2>📈 Хомяков в секунду</h2>
-                <div id="rate" class="rate">+1 хомяк/сек</div>
-            </div>
-        </div>
+        <main>
+            <div class="hero-section">
+                <div class="timer-display">
+                    <div class="time-label">Ты уже пинаешь хуи:</div>
+                    <div id="timer" class="timer">
+                        <span id="days">00</span><span class="time-unit">д</span>
+                        <span id="hours">00</span><span class="time-unit">ч</span>
+                        <span id="minutes">00</span><span class="time-unit">м</span>
+                        <span id="seconds">00</span><span class="time-unit">с</span>
+                    </div>
+                    <div class="motto">"И пусть весь мир подождёт!"</div>
+                </div>
 
-        <div class="universe">
-            <div class="universe-info">
-                <h3>🌌 Хомячковая Вселенная</h3>
-                <p>Вместимость: <span id="capacity">Неограниченно</span></p>
-                <p>Занято: <span id="occupied">0.0000000001%</span></p>
+                <div class="character-container">
+                    <div class="character" id="character">
+                        <!-- Анимация персонажа -->
+                        <div class="character-body">
+                            <div class="head">
+                                <div class="face">
+                                    <div class="eye left"></div>
+                                    <div class="eye right"></div>
+                                    <div class="mouth"></div>
+                                </div>
+                            </div>
+                            <div class="torso">
+                                <div class="arm left"></div>
+                                <div class="arm right"></div>
+                            </div>
+                            <div class="legs">
+                                <div class="leg left"></div>
+                                <div class="leg right">
+                                    <div class="foot" id="foot"></div>
+                                </div>
+                            </div>
+                            <div class="balls" id="balls">
+                                <!-- Шарики будут генерироваться через JS -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="character-label">Текущее состояние бездельника</div>
+                </div>
             </div>
-            <div id="hamsterUniverse" class="hamster-universe">
-                <!-- Хомячки будут добавляться здесь -->
-            </div>
-        </div>
 
-        <div class="controls">
-            <button id="speedUp" class="btn">🚀 Ускорить размножение (x2)</button>
-            <button id="addHundred" class="btn">🎯 +100 хомячков</button>
-            <button id="reset" class="btn reset">🔄 Сбросить</button>
-        </div>
+            <div class="stats-section">
+                <div class="stat">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>Затрачено энергии</h3>
+                    <div id="energy">0.001 кДж</div>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-brain"></i>
+                    <h3>Мыслительная активность</h3>
+                    <div id="thoughts">0%</div>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Эффективность</h3>
+                    <div id="efficiency">100% безделья</div>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Личный рекорд</h3>
+                    <div id="record">Ещё не установлен</div>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <div class="control-group">
+                    <button id="startBtn" class="btn start-btn">
+                        <i class="fas fa-play"></i> Начать пинать хуи
+                    </button>
+                    <button id="pauseBtn" class="btn pause-btn" disabled>
+                        <i class="fas fa-pause"></i> Пауза
+                    </button>
+                    <button id="resetBtn" class="btn reset-btn">
+                        <i class="fas fa-redo"></i> Сбросить
+                    </button>
+                </div>
+                <div class="hint">
+                    <i class="fas fa-info-circle"></i>
+                    Таймер работает автоматически, когда вкладка открыта
+                </div>
+            </div>
+
+            <div class="philosophy-section">
+                <h2><i class="fas fa-quote-left"></i> Философия процесса</h2>
+                <div class="quotes">
+                    <div class="quote">
+                        "Пинание хуев — это не безделье, а искусство"
+                        <div class="author">— Великий Лентяй</div>
+                    </div>
+                    <div class="quote">
+                        "Чем дольше ты это делаешь, тем лучше получается"
+                        <div class="author">— Мастер Прокрастинации</div>
+                    </div>
+                </div>
+            </div>
+        </main>
 
         <footer>
-            <p>Хомячки размножаются автоматически с момента загрузки страницы</p>
-            <p>Вместимость вселенной: 10,000,000,000,000,000,000+ хомячков</p>
+            <div class="footer-content">
+                <p>© 2024 Таймер Пинания Хуев. Все права бездельников защищены.</p>
+                <p class="disclaimer">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Внимание! Чрезмерное пинание хуев может привести к накоплению дел.
+                </p>
+                <div class="tech">
+                    <span>Состояние: <span id="status">Ожидание...</span></span>
+                    <span id="lastUpdate">Запуск...</span>
+                </div>
+            </div>
         </footer>
     </div>
 
