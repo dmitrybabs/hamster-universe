@@ -48,6 +48,12 @@ class ProcrastinationTimer {
         // GIF
         this.procrastinationGif = document.getElementById('procrastinationGif');
         
+        // Переменные для контроля уведомлений
+        this.lastRecordNotificationTime = 0;
+        this.lastAchievementNotificationTime = 0;
+        this.currentLevelIndex = 0;
+        this.notificationCooldown = 30000; // 30 секунд между уведомлениями одного типа
+        
         // Инициализация
         this.loadRecord();
         this.loadAchievements();
@@ -143,6 +149,9 @@ class ProcrastinationTimer {
             this.gifStatusEl.style.color = '#95a5a6';
             this.updateDisplay();
             this.updateProgress();
+            this.lastRecordNotificationTime = 0;
+            this.lastAchievementNotificationTime = 0;
+            this.currentLevelIndex = 0;
         }
     }
     
@@ -161,6 +170,7 @@ class ProcrastinationTimer {
             
             // Проверяем достижения только если время изменилось
             if (timeDiff > 0) {
+                this.checkLevelChange();
                 this.checkAchievements();
                 this.checkRecord();
             }
@@ -227,11 +237,13 @@ class ProcrastinationTimer {
         // Определяем текущий уровень
         let currentLevel = this.levels[0];
         let nextLevel = this.levels[1] || this.levels[0];
+        let newLevelIndex = 0;
         
         for (let i = this.levels.length - 1; i >= 0; i--) {
             if (this.totalSeconds >= this.levels[i].seconds) {
                 currentLevel = this.levels[i];
                 nextLevel = this.levels[i + 1] || this.levels[this.levels.length - 1];
+                newLevelIndex = i;
                 break;
             }
         }
@@ -255,6 +267,35 @@ class ProcrastinationTimer {
             this.progressFillEl.style.background = 'linear-gradient(90deg, #2ecc71, #f1c40f)';
         } else {
             this.progressFillEl.style.background = 'linear-gradient(90deg, #2ecc71, #3498db)';
+        }
+        
+        // Сохраняем индекс уровня для проверки изменений
+        this.currentLevelIndex = newLevelIndex;
+    }
+    
+    checkLevelChange() {
+        // Проверяем переход на новый уровень (каждые 5 минут после первого уровня)
+        if (this.totalSeconds >= 300) { // После 5 минут
+            const minutes = Math.floor(this.totalSeconds / 60);
+            
+            // Показываем уведомление каждые 5 минут, но не чаще чем раз в 30 секунд
+            if (minutes % 5 === 0 && this.totalSeconds % 60 === 0) {
+                const currentTime = Date.now();
+                if (currentTime - this.lastRecordNotificationTime > this.notificationCooldown) {
+                    this.lastRecordNotificationTime = currentTime;
+                    
+                    let notificationText = '';
+                    if (minutes >= 60) {
+                        const hours = Math.floor(minutes / 60);
+                        const remainingMinutes = minutes % 60;
+                        notificationText = `🎯 Уже ${hours}ч ${remainingMinutes}м пинаешь хуи!`;
+                    } else {
+                        notificationText = `🎯 Уже ${minutes} минут пинаешь хуи!`;
+                    }
+                    
+                    this.showNotification(notificationText, 'info');
+                }
+            }
         }
     }
     
@@ -285,9 +326,20 @@ class ProcrastinationTimer {
         // Сохраняем все новые достижения
         if (newAchievements.length > 0) {
             localStorage.setItem('procrastinationAchievements', JSON.stringify(unlocked));
-            newAchievements.forEach(achievement => {
-                this.unlockAchievement(achievement);
-            });
+            
+            // Показываем уведомление только для первого достижения из группы
+            // и не чаще чем раз в 30 секунд
+            const currentTime = Date.now();
+            if (currentTime - this.lastAchievementNotificationTime > this.notificationCooldown) {
+                this.lastAchievementNotificationTime = currentTime;
+                const mainAchievement = newAchievements[0];
+                this.unlockAchievement(mainAchievement);
+            } else {
+                // Тихо разблокируем достижения без уведомления
+                newAchievements.forEach(achievement => {
+                    this.silentUnlockAchievement(achievement);
+                });
+            }
         }
     }
     
@@ -301,13 +353,22 @@ class ProcrastinationTimer {
             }, 500);
             
             // Уведомление
-            this.showNotification(`🎉 Достижение: ${achievement.name}`);
+            this.showNotification(`🎉 Достижение: ${achievement.name}`, 'achievement');
         }
         
         this.renderAchievements();
     }
     
-    showNotification(text) {
+    silentUnlockAchievement(achievement) {
+        // Тихое разблокирование без уведомлений
+        const achievementEl = document.querySelector(`[data-id="${achievement.id}"]`);
+        if (achievementEl) {
+            achievementEl.classList.add('unlocked');
+        }
+        this.renderAchievements();
+    }
+    
+    showNotification(text, type = 'info') {
         // Удаляем старые уведомления
         const oldNotifications = document.querySelectorAll('.notification');
         oldNotifications.forEach(notification => notification.remove());
@@ -315,11 +376,22 @@ class ProcrastinationTimer {
         const notification = document.createElement('div');
         notification.className = 'notification';
         notification.textContent = text;
+        
+        // Разные цвета для разных типов уведомлений
+        let gradient = 'linear-gradient(45deg, #f1c40f, #e67e22)'; // По умолчанию желтый
+        if (type === 'achievement') {
+            gradient = 'linear-gradient(45deg, #9b59b6, #3498db)'; // Фиолетовый-синий для достижений
+        } else if (type === 'record') {
+            gradient = 'linear-gradient(45deg, #e74c3c, #f1c40f)'; // Красный-желтый для рекордов
+        } else if (type === 'info') {
+            gradient = 'linear-gradient(45deg, #2ecc71, #3498db)'; // Зеленый-синий для инфо
+        }
+        
         notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            background: linear-gradient(45deg, #f1c40f, #e67e22);
+            background: ${gradient};
             color: white;
             padding: 15px 25px;
             border-radius: 10px;
@@ -327,6 +399,8 @@ class ProcrastinationTimer {
             animation: slideIn 0.5s ease;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             font-weight: bold;
+            max-width: 300px;
+            text-align: center;
         `;
         
         document.body.appendChild(notification);
@@ -377,8 +451,13 @@ class ProcrastinationTimer {
             this.setRecord(this.totalSeconds);
             this.updateRecordDisplay();
             
-            // Анимация при новом рекорде
-            if (this.totalSeconds > 0 && oldRecord > 0) {
+            // Показываем уведомление о рекорде только при значительном увеличении
+            // (больше чем на 5 минут) и не чаще чем раз в 30 секунд
+            const recordIncrease = this.totalSeconds - oldRecord;
+            const currentTime = Date.now();
+            
+            if (recordIncrease >= 300 && currentTime - this.lastRecordNotificationTime > this.notificationCooldown) {
+                this.lastRecordNotificationTime = currentTime;
                 this.celebrateNewRecord(oldRecord);
             }
         }
@@ -407,7 +486,7 @@ class ProcrastinationTimer {
         if (hours > 0) recordText += `${hours}ч `;
         if (minutes > 0) recordText += `${minutes}м`;
         
-        this.showNotification(recordText);
+        this.showNotification(recordText, 'record');
     }
     
     getRecord() {
