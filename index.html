@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хомячковая Вселенная</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐹 Хомячковая Вселенная 🐹</h1>
+            <p class="subtitle">Хомячки размножаются каждую секунду!</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h2>⏱️ Время существования</h2>
+                <div id="timer" class="timer">0 секунд</div>
+            </div>
+            
+            <div class="stat-card">
+                <h2>🐹 Количество хомячков</h2>
+                <div id="hamsterCount" class="counter">1 хомяк</div>
+            </div>
+            
+            <div class="stat-card">
+                <h2>📈 Хомяков в секунду</h2>
+                <div id="rate" class="rate">+1 хомяк/сек</div>
+            </div>
+        </div>
+
+        <div class="universe">
+            <div class="universe-info">
+                <h3>🌌 Хомячковая Вселенная</h3>
+                <p>Вместимость: <span id="capacity">Неограниченно</span></p>
+                <p>Занято: <span id="occupied">0.0000000001%</span></p>
+            </div>
+            <div id="hamsterUniverse" class="hamster-universe">
+                <!-- Хомячки будут добавляться здесь -->
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="speedUp" class="btn">🚀 Ускорить размножение (x2)</button>
+            <button id="addHundred" class="btn">🎯 +100 хомячков</button>
+            <button id="reset" class="btn reset">🔄 Сбросить</button>
+        </div>
+
+        <footer>
+            <p>Хомячки размножаются автоматически с момента загрузки страницы</p>
+            <p>Вместимость вселенной: 10,000,000,000,000,000,000+ хомячков</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
